@@ -1,0 +1,6 @@
+name : BenEdit
+author : Benliam12
+version : 1.0
+main : ca.benliam12.benedit.BenEdit
+commands : 
+  bset:
