@@ -53,7 +53,7 @@ public class Selection
 		{
 		this.location1 = loc;
 		}
-		return ChatColor.GREEN + "Position 1 set on block : x" + (int)loc.getX() + " y" + (int)loc.getY() + " z" + (int)loc.getZ();
+		return ChatColor.GREEN + "Position 1 set on block : " + (int)loc.getX() + ", " + (int)loc.getY() + ", " + (int)loc.getZ();
 	}
 	
 	/**
@@ -78,9 +78,9 @@ public class Selection
 		}
 		else
 		{
-		this.location2 = loc;
+			this.location2 = loc;
 		}
-		return ChatColor.GREEN + "Position 2 set on block : x" + (int)loc.getX() + " y" + (int)loc.getY() + " z" + (int)loc.getZ();
+		return ChatColor.GREEN + "Position 2 set on block : " + (int)loc.getX() + ", " + (int)loc.getY() + ", " + (int)loc.getZ();
 	}
 	
 	/**
@@ -143,16 +143,22 @@ public class Selection
 	 * @param type BlockType
 	 */
 	@SuppressWarnings("deprecation")
-	public String set(Material mat)
+	public String set(Material mat, byte datavalue)
 	{
 		if(this.location1 != null && this.location2 != null)
 		{
+			int nbBlocks = 0;
+			World w = Bukkit.getWorld(this.location1.getWorld().getName());
 			for(Block block : this.getAllBlocks(this.location1, this.location2))
 			{
+				if(!((w.getBlockAt(block.getLocation()).getType()) == mat) || !(w.getBlockAt(block.getLocation()).getData() == datavalue))
+				{
+					nbBlocks++;
+				}
 				block.setType(mat);
-				block.setData((byte) 0);
+				block.setData(datavalue);
 			}
-			return ChatColor.GREEN + Integer.toString(this.getAllBlocks(this.location1, this.location2).size()) + " blocks were changed";
+			return ChatColor.GREEN + Integer.toString(nbBlocks) + " blocks were changed";
 		}
 		else 
 		{

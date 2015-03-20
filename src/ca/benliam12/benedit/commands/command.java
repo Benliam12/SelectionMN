@@ -41,7 +41,7 @@ public class command implements CommandExecutor {
 						if(Material.getMaterial(matID).isBlock())
 						{
 							Material mat = Material.getMaterial(matID);
-							player.sendMessage(((Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("selection")).set(mat));
+							player.sendMessage(((Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("selection")).set(mat,(byte)0));
 						} 
 						else 
 						{
@@ -52,9 +52,49 @@ public class command implements CommandExecutor {
 					{
 						player.sendMessage(ChatColor.RED + "This is not a valid block !");
 					}
-				} catch(Exception ex)
+				} 
+				catch(Exception ex)
 				{
-					player.sendMessage(ChatColor.RED + "Usage : /bset <BlockID>");
+					if(args[0].contains(":"))
+					{
+						String[] nargs = args[0].split(":");
+						try
+						{
+							int datavalue = Integer.parseInt(nargs[1]);
+							int blockID = Integer.parseInt(nargs[0]);
+							if(datavalue < 16 && datavalue >= 0)
+							{
+								if(Material.getMaterial(blockID) != null)
+								{
+									if(Material.getMaterial(blockID).isBlock())
+									{
+										Material mat = Material.getMaterial(blockID);
+										player.sendMessage(((Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("selection")).set(mat,(byte)datavalue));
+									}
+									else
+									{
+										player.sendMessage(ChatColor.RED + "This is not a valid block !");
+									}
+								}
+								else 
+								{
+									player.sendMessage(ChatColor.RED + "This is not a valid block !");
+								}
+							}
+							else 
+							{
+								player.sendMessage(ChatColor.RED + "Datatag must be between 0-15");
+							}
+						} 
+						catch (Exception exep)
+						{
+							player.sendMessage(ChatColor.RED + "Invalid block ID / Datavalue");
+						}
+					}
+					else
+					{
+						player.sendMessage(ChatColor.RED + "Usage : /bset <BlockID>");
+					}
 				}
 			}
 			else
