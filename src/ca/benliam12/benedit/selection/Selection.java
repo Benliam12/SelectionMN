@@ -8,9 +8,16 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
+
+import ca.benliam12.benedit.selection.actions.Clipboard;
+import ca.benliam12.benedit.session.Session;
 
 public class Selection 
 {
+	private Clipboard clipboard;
+	private String owner;
 	/**
 	 * Location for position 1
 	 */
@@ -24,9 +31,10 @@ public class Selection
 	/**
 	 * Constructor
 	 */
-	public Selection()
+	public Selection(Session session)
 	{
-		
+		this.clipboard = new Clipboard();
+		this.owner = session.getName();
 	}
 	
 	/**
@@ -110,7 +118,7 @@ public class Selection
 	 * @param loc2 The second point
 	 * @return ArrayList containting each blocks
 	 */
-	public ArrayList<Block> getAllBlocks(Location loc1, Location loc2){
+	public ArrayList<Block> getBlocks(Location loc1, Location loc2){
 		double x = Math.max(loc1.getX(), loc2.getX());
 		double y = Math.max(loc1.getY(), loc2.getY());
 		double z = Math.max(loc1.getZ(), loc2.getZ());
@@ -149,7 +157,7 @@ public class Selection
 		{
 			int nbBlocks = 0;
 			World w = Bukkit.getWorld(this.location1.getWorld().getName());
-			for(Block block : this.getAllBlocks(this.location1, this.location2))
+			for(Block block : this.getBlocks(this.location1, this.location2))
 			{
 				if(!((w.getBlockAt(block.getLocation()).getType()) == mat) || !(w.getBlockAt(block.getLocation()).getData() == datavalue))
 				{
@@ -164,5 +172,33 @@ public class Selection
 		{
 			return ChatColor.RED + "You must define 2 points";
 		}
+	}
+	/**
+	 * Method to copy something
+	 */
+	public String copy()
+	{
+		if(this.location1 != null && this.location2 != null)
+		{
+			Player p = Bukkit.getPlayer(this.owner);
+			this.clipboard.copy(new Vector(p.getLocation().getBlockX(),p.getLocation().getBlockY(),p.getLocation().getBlockZ()),this.getBlocks(this.location1, this.location2));
+			return ChatColor.GREEN + "copied !";
+		} 
+		else
+		{
+			return ChatColor.RED + "You must define 2 points";
+		}
+		
+	}
+	/**
+	 * Method to paste
+	 */
+	public String paste()
+	{
+		Player p = Bukkit.getPlayer(this.owner);
+		int x = p.getLocation().getBlockX();
+		int y = p.getLocation().getBlockY();
+		int z = p.getLocation().getBlockZ();
+		return this.clipboard.paste(new Vector(x,y,z), p.getLocation().getWorld());
 	}
 }

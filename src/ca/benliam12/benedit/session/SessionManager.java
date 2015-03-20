@@ -52,7 +52,7 @@ public class SessionManager
 		for(Player p : Bukkit.getOnlinePlayers())
 		{
 			this.addSession(p.getName());
-			this.getSession(p.getName()).setInfo("selection", new Selection());
+			this.getSession(p.getName()).setInfo("bedit-selection", new Selection(this.getSession(p.getName())));
 		}
 	}
 	

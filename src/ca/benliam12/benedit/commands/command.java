@@ -41,7 +41,7 @@ public class command implements CommandExecutor {
 						if(Material.getMaterial(matID).isBlock())
 						{
 							Material mat = Material.getMaterial(matID);
-							player.sendMessage(((Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("selection")).set(mat,(byte)0));
+							player.sendMessage(((Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("bedit-selection")).set(mat,(byte)0));
 						} 
 						else 
 						{
@@ -69,7 +69,7 @@ public class command implements CommandExecutor {
 									if(Material.getMaterial(blockID).isBlock())
 									{
 										Material mat = Material.getMaterial(blockID);
-										player.sendMessage(((Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("selection")).set(mat,(byte)datavalue));
+										player.sendMessage(((Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("bedit-selection")).set(mat,(byte)datavalue));
 									}
 									else
 									{
@@ -102,9 +102,15 @@ public class command implements CommandExecutor {
 				player.sendMessage(ChatColor.RED + "Usage : /bset <BlockID>");
 			}
 		}
-		else if(label.equalsIgnoreCase("bcut"))
+		else if(label.equalsIgnoreCase("bcopy"))
 		{
-			
+			Selection selection = (Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("bedit-selection");
+			player.sendMessage(selection.copy());
+		} 
+		else if(label.equalsIgnoreCase("bpaste"))
+		{
+			Selection selection = (Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("bedit-selection");
+			player.sendMessage(selection.paste());
 		}
 		return false;
 	}

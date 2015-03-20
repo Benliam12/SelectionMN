@@ -25,8 +25,9 @@ public class PlayerListener implements Listener
 	@EventHandler
 	public void PlayerJoin(PlayerJoinEvent e)
 	{
-		SessionManager.getInstance().addSession(e.getPlayer().getName());
-		SessionManager.getInstance().getSession(e.getPlayer().getName()).setInfo("selection", new Selection());
+		SessionManager sm = SessionManager.getInstance();
+		sm.addSession(e.getPlayer().getName());
+		sm.getSession(e.getPlayer().getName()).setInfo("bedit-selection", new Selection(sm.getSession(e.getPlayer().getName())));
 	}
 
 	/**
@@ -48,13 +49,13 @@ public class PlayerListener implements Listener
 		// Making pos1
 		if(e.getAction() == Action.LEFT_CLICK_BLOCK && e.getPlayer().getItemInHand().getType() == Material.STICK)
 		{
-			player.sendMessage(((Selection) session.getInfo("selection")).setPos1(e.getClickedBlock().getLocation()));
+			player.sendMessage(((Selection) session.getInfo("bedit-selection")).setPos1(e.getClickedBlock().getLocation()));
 			e.setCancelled(true);
 		}
 		// Making pos2
 		else if(e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getPlayer().getItemInHand().getType() == Material.STICK)
 		{
-			player.sendMessage(((Selection) session.getInfo("selection")).setPos2(e.getClickedBlock().getLocation()));
+			player.sendMessage(((Selection) session.getInfo("bedit-selection")).setPos2(e.getClickedBlock().getLocation()));
 			e.setCancelled(true);
 		}
 	}

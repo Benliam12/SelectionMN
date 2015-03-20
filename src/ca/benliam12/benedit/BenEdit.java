@@ -20,7 +20,7 @@ public class BenEdit extends JavaPlugin
 	/**
 	 * Console Logger
 	 */
-	private static Logger log = Logger.getLogger("minecraft");
+	public static Logger log = Logger.getLogger("minecraft");
 	
 	/**
 	 * Instance of main class
@@ -46,7 +46,10 @@ public class BenEdit extends JavaPlugin
 		SessionManager.getInstance().setup();
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayerListener(),this);
-		getCommand("bset").setExecutor(new command());
+		command cmd = new command();
+		getCommand("bset").setExecutor(cmd);
+		getCommand("bpaste").setExecutor(cmd);
+		getCommand("bcopy").setExecutor(cmd);
 		log.info("[BenEdit] Enabled !");
 	}
 	
