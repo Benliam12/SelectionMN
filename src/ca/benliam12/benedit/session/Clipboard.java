@@ -33,6 +33,7 @@ public class Clipboard
 	@SuppressWarnings("deprecation")
 	public String copy(Vector playerLocation, ArrayList<Block> blocks)
 	{
+		this.clipboard.clear();
 		int i = 0;
 		for(Block b : blocks)
 		{
