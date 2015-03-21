@@ -11,7 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import ca.benliam12.benedit.selection.actions.Clipboard;
+import ca.benliam12.benedit.session.Clipboard;
 import ca.benliam12.benedit.session.Session;
 
 public class Selection 
