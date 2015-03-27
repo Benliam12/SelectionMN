@@ -52,6 +52,10 @@ public class Session
 	
 	public Selection getSelection()
 	{
+		if(this.selection == null)
+		{
+			this.selection = new Selection(this);
+		}
 		return this.selection;
 	}
 	

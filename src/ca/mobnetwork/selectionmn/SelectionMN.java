@@ -47,10 +47,7 @@ public class SelectionMN extends JavaPlugin
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayerListener(),this);
 		command cmd = new command();
-		getCommand("bset").setExecutor(cmd);
-		getCommand("bpaste").setExecutor(cmd);
-		getCommand("bcopy").setExecutor(cmd);
-		log.info("[BenEdit] Enabled !");
+		getCommand("set").setExecutor(cmd);
 	}
 	
 	/**
