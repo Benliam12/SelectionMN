@@ -1,4 +1,4 @@
-package ca.benliam12.benedit.blocks;
+package ca.mobnetwork.selectionmn.blocks;
 
 import org.bukkit.Material;
 

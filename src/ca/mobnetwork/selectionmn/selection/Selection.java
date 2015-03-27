@@ -1,4 +1,4 @@
-package ca.benliam12.benedit.selection;
+package ca.mobnetwork.selectionmn.selection;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
-import ca.benliam12.benedit.session.Session;
+import ca.mobnetwork.selectionmn.session.Session;
 
 public class Selection
 {
@@ -111,8 +111,8 @@ public class Selection
 	 * @param loc2 The second point
 	 * @return ArrayList containting each blocks
 	 */
-	public ArrayList<ca.benliam12.benedit.blocks.Block> getBlocks(){
-		ArrayList<ca.benliam12.benedit.blocks.Block> blocks = new ArrayList<ca.benliam12.benedit.blocks.Block>();
+	public ArrayList<ca.mobnetwork.selectionmn.blocks.Block> getBlocks(){
+		ArrayList<ca.mobnetwork.selectionmn.blocks.Block> blocks = new ArrayList<ca.mobnetwork.selectionmn.blocks.Block>();
 		
 		int maxX = this.getWidth();
 		int maxY = this.getHeight();
@@ -124,7 +124,7 @@ public class Selection
 			{
 				for(int z = 0; z < maxZ; z++)
 				{
-					ca.benliam12.benedit.blocks.Block block = new ca.benliam12.benedit.blocks.Block(this.world.getBlockAt(x, y, z).getType());
+					ca.mobnetwork.selectionmn.blocks.Block block = new ca.mobnetwork.selectionmn.blocks.Block(this.world.getBlockAt(x, y, z).getType());
 					
 					blocks.add(block);
 				}

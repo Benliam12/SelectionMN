@@ -1,4 +1,4 @@
-package ca.benliam12.benedit.listener;
+package ca.mobnetwork.selectionmn.listener;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,8 +11,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import ca.benliam12.benedit.session.Session;
-import ca.benliam12.benedit.session.SessionManager;
+import ca.mobnetwork.selectionmn.session.Session;
+import ca.mobnetwork.selectionmn.session.SessionManager;
 /**
  * 
  * @author Benliam12

@@ -1,4 +1,4 @@
-package ca.benliam12.benedit.commands;
+package ca.mobnetwork.selectionmn.commands;
 
 
 import org.bukkit.ChatColor;
@@ -8,8 +8,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import ca.benliam12.benedit.session.Session;
-import ca.benliam12.benedit.session.SessionManager;
+import ca.mobnetwork.selectionmn.session.Session;
+import ca.mobnetwork.selectionmn.session.SessionManager;
 /**
  * Class controling main commands
  * 

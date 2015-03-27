@@ -1,8 +1,8 @@
-package ca.benliam12.benedit.session;
+package ca.mobnetwork.selectionmn.session;
 
 import java.util.UUID;
 
-import ca.benliam12.benedit.selection.Selection;
+import ca.mobnetwork.selectionmn.selection.Selection;
 /**
  * Class of individual Session
  * @author Benliam12

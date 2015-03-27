@@ -1,4 +1,4 @@
-package ca.benliam12.benedit;
+package ca.mobnetwork.selectionmn;
 
 import java.util.logging.Logger;
 
@@ -6,16 +6,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import ca.benliam12.benedit.commands.command;
-import ca.benliam12.benedit.listener.PlayerListener;
-import ca.benliam12.benedit.session.SessionManager;
+import ca.mobnetwork.selectionmn.commands.command;
+import ca.mobnetwork.selectionmn.listener.PlayerListener;
+import ca.mobnetwork.selectionmn.session.SessionManager;
 
 /**
  * 
  * @author Benliam12
  * @version 1.0
  */
-public class BenEdit extends JavaPlugin
+public class SelectionMN extends JavaPlugin
 {
 	/**
 	 * Console Logger
@@ -25,7 +25,7 @@ public class BenEdit extends JavaPlugin
 	/**
 	 * Instance of main class
 	 */
-	private static BenEdit instance;
+	private static SelectionMN instance;
 	
 	/**
 	 * Getting instance of BenEdit
@@ -33,7 +33,7 @@ public class BenEdit extends JavaPlugin
 	 * @return BenEdit instance
 	 */
 	
-	public static BenEdit getInstance()
+	public static SelectionMN getInstance()
 	{
 		return instance;
 	}

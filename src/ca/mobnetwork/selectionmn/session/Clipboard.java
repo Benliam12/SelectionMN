@@ -1,4 +1,4 @@
-package ca.benliam12.benedit.session;
+package ca.mobnetwork.selectionmn.session;
 
 
 /**
