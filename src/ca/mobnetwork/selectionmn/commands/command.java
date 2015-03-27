@@ -29,10 +29,7 @@ public class command implements CommandExecutor {
 		Player player = (Player) sender;
 		
 		if(label.equalsIgnoreCase("set"))
-		{
-			player.sendMessage("pos1: " + SessionManager.getInstance().getSession(player.getUniqueId()).getSelection().getPosition1().getZ());
-			player.sendMessage("pos2: " + SessionManager.getInstance().getSession(player.getUniqueId()).getSelection().getPosition2().getZ());
-			
+		{	
 			if(args.length == 1)
 			{
 				try

@@ -8,7 +8,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
-import ca.mobnetwork.selectionmn.SelectionMN;
 import ca.mobnetwork.selectionmn.session.Session;
 
 public class Selection
@@ -167,8 +166,6 @@ public class Selection
 						
 						block.setType(material);
 						block.setData(data);
-						
-						SelectionMN.log.info("1");
 					}
 				}
 			}
