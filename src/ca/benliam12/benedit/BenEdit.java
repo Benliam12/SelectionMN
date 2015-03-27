@@ -58,6 +58,5 @@ public class BenEdit extends JavaPlugin
 	 */
 	public void onDisable()
 	{
-		SessionManager.getInstance().clear();
 	}
 }

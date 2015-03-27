@@ -2,39 +2,23 @@ package ca.benliam12.benedit.selection;
 
 import java.util.ArrayList;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import ca.benliam12.benedit.session.Clipboard;
 import ca.benliam12.benedit.session.Session;
 
-public class Selection 
+public class Selection
 {
-	private Clipboard clipboard;
-	private String owner;
-	/**
-	 * Location for position 1
-	 */
-	private Location location1;
-	
-	/**
-	 * Location for position 2
-	 */
-	private Location location2;
-	
-	/**
-	 * Constructor
-	 */
+	private World world;
+	private Vector position1;
+	private Vector position2;
+
 	public Selection(Session session)
 	{
-		this.clipboard = new Clipboard();
-		this.owner = session.getName();
+		
 	}
 	
 	/**
@@ -43,25 +27,16 @@ public class Selection
 	 * @param loc Location of the new Pos1
 	 * @return Success/Error Message
 	 */
-	public String setPos1(Location loc)
+	public Vector setPosition1(Location location)
 	{
-		if(this.location2 != null)
+		if(location.getWorld() != world)
 		{
-			if(this.location2.getWorld().getName().equalsIgnoreCase(loc.getWorld().getName()))
-			{
-				this.location1 = loc;
-			}
-			else
-			{
-				this.location2 = null;
-				this.location1 = loc;
-			}
+			this.position2 = null;
 		}
-		else
-		{
-		this.location1 = loc;
-		}
-		return ChatColor.GREEN + "Position 1 set on block : " + (int)loc.getX() + ", " + (int)loc.getY() + ", " + (int)loc.getZ();
+		
+		this.position1 = new Vector(location.getX(), location.getY(), location.getZ());
+		
+		return this.position1;
 	}
 	
 	/**
@@ -70,25 +45,43 @@ public class Selection
 	 * @param loc Location of the new Pos2
 	 * @return Success/Error Message
 	 */
-	public String setPos2(Location loc)
+	public Vector setPosition2(Location location)
 	{
-		if(this.location1 != null)
+		if(location.getWorld() != world)
 		{
-			if(this.location1.getWorld().getName().equalsIgnoreCase(loc.getWorld().getName()))
-			{
-				this.location2 = loc;
-			}
-			else
-			{
-				this.location1 = null;
-				this.location2 = loc;
-			}
+			this.position2 = null;
 		}
-		else
-		{
-			this.location2 = loc;
-		}
-		return ChatColor.GREEN + "Position 2 set on block : " + (int)loc.getX() + ", " + (int)loc.getY() + ", " + (int)loc.getZ();
+		
+		this.position2 = new Vector(location.getX(), location.getY(), location.getZ());
+		
+		return this.position2;
+	}
+	
+	public Vector getLocation()
+	{
+		double x = Math.max(this.position1.getX(), this.position2.getX());
+		double y = Math.max(this.position1.getY(), this.position2.getY());
+		double z = Math.max(this.position1.getZ(), this.position2.getZ());
+		
+		return new Vector(x, y, z);
+	}
+	
+	public int getWidth()
+	{
+		int width = (int) this.position1.getX() - (int) this.position2.getX();
+		return Math.abs(width);
+	}
+	
+	public int getLength()
+	{
+		int length = (int) this.position1.getZ() - (int) this.position2.getZ();
+		return Math.abs(length);
+	}
+	
+	public int getHeight()
+	{
+		int height = (int) this.position1.getY() - (int) this.position2.getY();
+		return Math.abs(height);
 	}
 	
 	/**
@@ -96,9 +89,9 @@ public class Selection
 	 * 
 	 * @return Location of post1
 	 */
-	public Location getPos1()
+	public Vector getPosition1()
 	{
-		return this.location1;
+		return this.position1;
 	}
 	
 	/**
@@ -106,9 +99,9 @@ public class Selection
 	 * 
 	 * @return Location of post1
 	 */
-	public Location getPos2()
+	public Vector getPosition2()
 	{
-		return this.location2;
+		return this.position2;
 	}
 	
 	/**
@@ -118,30 +111,26 @@ public class Selection
 	 * @param loc2 The second point
 	 * @return ArrayList containting each blocks
 	 */
-	public ArrayList<Block> getBlocks(Location loc1, Location loc2){
-		double x = Math.max(loc1.getX(), loc2.getX());
-		double y = Math.max(loc1.getY(), loc2.getY());
-		double z = Math.max(loc1.getZ(), loc2.getZ());
-		World w = Bukkit.getWorld(loc1.getWorld().getName());
-		ArrayList<Block> blocks = new ArrayList<>();
+	public ArrayList<ca.benliam12.benedit.blocks.Block> getBlocks(){
+		ArrayList<ca.benliam12.benedit.blocks.Block> blocks = new ArrayList<ca.benliam12.benedit.blocks.Block>();
 		
-		while(x >= Math.min(loc1.getX(), loc2.getX()))
+		int maxX = this.getWidth();
+		int maxY = this.getHeight();
+		int maxZ = this.getLength();
+		
+		for(int x = 0; x < maxX; x++)
 		{
-			y = Math.max(loc1.getY(), loc2.getY());
-			
-			while(y >= Math.min(loc1.getY(), loc2.getY()))
+			for(int y = 0; y < maxY; y++)
 			{
-				z = Math.max(loc1.getZ(), loc2.getZ());
-				
-				while(z >= Math.min(loc1.getZ(), loc2.getZ()))
+				for(int z = 0; z < maxZ; z++)
 				{
-					blocks.add(w.getBlockAt((int)x, (int)y, (int)z));
-					z--;
+					ca.benliam12.benedit.blocks.Block block = new ca.benliam12.benedit.blocks.Block(this.world.getBlockAt(x, y, z).getType());
+					
+					blocks.add(block);
 				}
-				y--;
 			}
-			x--;
 		}
+		
 		return blocks;
 	}
 	
@@ -151,54 +140,39 @@ public class Selection
 	 * @param type BlockType
 	 */
 	@SuppressWarnings("deprecation")
-	public String set(Material mat, byte datavalue)
+	public Selection set(Material material, byte data)
 	{
-		if(this.location1 != null && this.location2 != null)
+		if(this.position1 != null && this.position2 != null)
 		{
-			int nbBlocks = 0;
-			World w = Bukkit.getWorld(this.location1.getWorld().getName());
-			for(Block block : this.getBlocks(this.location1, this.location2))
+			int maxX = this.getWidth();
+			int maxY = this.getHeight();
+			int maxZ = this.getLength();
+			
+			for(int x = 0; x < maxX; x++)
 			{
-				if(!((w.getBlockAt(block.getLocation()).getType()) == mat) || !(w.getBlockAt(block.getLocation()).getData() == datavalue))
+				for(int y = 0; y < maxY; y++)
 				{
-					nbBlocks++;
+					for(int z = 0; z < maxZ; z++)
+					{
+						Block block = this.world.getBlockAt(x, y, z);
+						
+						block.setType(material);
+						block.setData(data);
+					}
 				}
-				block.setType(mat);
-				block.setData(datavalue);
 			}
-			return ChatColor.GREEN + Integer.toString(nbBlocks) + " blocks were changed";
-		}
-		else 
-		{
-			return ChatColor.RED + "You must define 2 points";
-		}
-	}
-	/**
-	 * Method to copy something
-	 */
-	public String copy()
-	{
-		if(this.location1 != null && this.location2 != null)
-		{
-			Player p = Bukkit.getPlayer(this.owner);
-			this.clipboard.copy(new Vector(p.getLocation().getBlockX(),p.getLocation().getBlockY(),p.getLocation().getBlockZ()),this.getBlocks(this.location1, this.location2));
-			return ChatColor.GREEN + "copied !";
-		} 
-		else
-		{
-			return ChatColor.RED + "You must define 2 points";
 		}
 		
+		return this;
 	}
-	/**
-	 * Method to paste
-	 */
-	public String paste()
+	
+	/*public Clipboard copy(Player player)
 	{
-		Player p = Bukkit.getPlayer(this.owner);
-		int x = p.getLocation().getBlockX();
-		int y = p.getLocation().getBlockY();
-		int z = p.getLocation().getBlockZ();
-		return this.clipboard.paste(new Vector(x,y,z), p.getLocation().getWorld());
-	}
+		SessionManager sessionManager = SessionManager.getInstance();
+		
+		Clipboard clipboard = new Clipboard(sessionManager.getSession(player.getUniqueId()).getSelection());
+		sessionManager.getSession(player.getUniqueId()).setClipboard(clipboard);
+		
+		return clipboard;
+	}*/
 }

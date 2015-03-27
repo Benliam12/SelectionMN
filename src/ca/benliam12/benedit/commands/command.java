@@ -8,7 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import ca.benliam12.benedit.selection.Selection;
+import ca.benliam12.benedit.session.Session;
 import ca.benliam12.benedit.session.SessionManager;
 /**
  * Class controling main commands
@@ -18,100 +18,85 @@ import ca.benliam12.benedit.session.SessionManager;
  */
 public class command implements CommandExecutor {
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand (CommandSender sender, Command cmd, String label, String[] args)
 	{
 		if(!(sender instanceof Player))
 		{
-			return true;
+			return false;
 		}
 		
 		Player player = (Player) sender;
 		
-		if(label.equalsIgnoreCase("bset"))
+		if(label.equalsIgnoreCase("set"))
 		{
 			if(args.length == 1)
 			{
 				try
 				{
-					int matID = Integer.parseInt(args[0]);
-					if(Material.getMaterial(matID) != null)
+					String[] param = args[0].split(":");
+					Material material = Material.getMaterial(param[0]);
+					
+					if(material.isBlock())
 					{
-						if(Material.getMaterial(matID).isBlock())
-						{
-							Material mat = Material.getMaterial(matID);
-							player.sendMessage(((Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("bedit-selection")).set(mat,(byte)0));
-						} 
-						else 
-						{
-							player.sendMessage(ChatColor.RED + "This is not a valid block !");
+						SessionManager sessionManager = SessionManager.getInstance();
+						
+						if(param.length == 1)
+						{	
+							Session session = sessionManager.getSession(player.getUniqueId());
+							
+							session.getSelection().set(material, (byte) 0);
 						}
-					} 
-					else 
-					{
-						player.sendMessage(ChatColor.RED + "This is not a valid block !");
+						else if(param.length == 2)
+						{
+							int data;
+							
+							try
+							{
+								data = Integer.parseInt(param[1]);
+							}
+							catch(Exception exception)
+							{
+								player.sendMessage(ChatColor.RED + "Wrong usage: data must be between 0 and 15");
+								
+								return false;
+							}
+							
+							if(data > 15 || data < 0)
+							{
+								player.sendMessage(ChatColor.RED + "Wrong usage: data must be between 0 and 15");
+								
+								return false;
+							}
+							else
+							{
+								Session session = sessionManager.getSession(player.getUniqueId());
+								
+								session.getSelection().set(material, (byte) data);
+							}
+						}
+						else
+						{
+							player.sendMessage(ChatColor.RED + "Wrong usage: /set block:data");
+							
+							return false;
+						}
 					}
-				} 
-				catch(Exception ex)
+				}
+				catch(Exception exception)
 				{
-					if(args[0].contains(":"))
-					{
-						String[] nargs = args[0].split(":");
-						try
-						{
-							int datavalue = Integer.parseInt(nargs[1]);
-							int blockID = Integer.parseInt(nargs[0]);
-							if(datavalue < 16 && datavalue >= 0)
-							{
-								if(Material.getMaterial(blockID) != null)
-								{
-									if(Material.getMaterial(blockID).isBlock())
-									{
-										Material mat = Material.getMaterial(blockID);
-										player.sendMessage(((Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("bedit-selection")).set(mat,(byte)datavalue));
-									}
-									else
-									{
-										player.sendMessage(ChatColor.RED + "This is not a valid block !");
-									}
-								}
-								else 
-								{
-									player.sendMessage(ChatColor.RED + "This is not a valid block !");
-								}
-							}
-							else 
-							{
-								player.sendMessage(ChatColor.RED + "Datatag must be between 0-15");
-							}
-						} 
-						catch (Exception exep)
-						{
-							player.sendMessage(ChatColor.RED + "Invalid block ID / Datavalue");
-						}
-					}
-					else
-					{
-						player.sendMessage(ChatColor.RED + "Usage : /bset <BlockID>");
-					}
+					exception.printStackTrace();
+					player.sendMessage(ChatColor.RED + "Wrong usage: /set block:data");
+					
+					return false;
 				}
 			}
 			else
 			{
-				player.sendMessage(ChatColor.RED + "Usage : /bset <BlockID>");
+				player.sendMessage(ChatColor.RED + "Wrong usage: /set block:data");
 			}
 		}
-		else if(label.equalsIgnoreCase("bcopy"))
-		{
-			Selection selection = (Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("bedit-selection");
-			player.sendMessage(selection.copy());
-		} 
-		else if(label.equalsIgnoreCase("bpaste"))
-		{
-			Selection selection = (Selection) SessionManager.getInstance().getSession(player.getName()).getInfo("bedit-selection");
-			player.sendMessage(selection.paste());
-		}
+
 		return false;
 	}
 

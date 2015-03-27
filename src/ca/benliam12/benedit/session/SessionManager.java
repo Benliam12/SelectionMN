@@ -1,12 +1,10 @@
 package ca.benliam12.benedit.session;
 
 import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import ca.benliam12.benedit.selection.Selection;
 
 
 /**
@@ -16,14 +14,7 @@ import ca.benliam12.benedit.selection.Selection;
  */
 public class SessionManager 
 {
-	/**
-	 * Array of Sessions
-	 */
-	private HashMap<String,Session> sessions = new HashMap<>();
-	
-	/**
-	 * Instance of SessionManager
-	 */
+	private HashMap<UUID, Session> sessions = new HashMap<>();
 	private static SessionManager instance = new SessionManager();
 	
 	/**
@@ -36,9 +27,6 @@ public class SessionManager
 		return instance;
 	}
 	
-	/**
-	 * Constructor
-	 */
 	public SessionManager()
 	{
 		
@@ -49,22 +37,9 @@ public class SessionManager
 	 */
 	public void setup()
 	{
-		for(Player p : Bukkit.getOnlinePlayers())
+		for(Player player : Bukkit.getOnlinePlayers())
 		{
-			this.addSession(p.getName());
-			this.getSession(p.getName()).setInfo("bedit-selection", new Selection(this.getSession(p.getName())));
-		}
-	}
-	
-	/**
-	 * Method to clear sessions
-	 */
-	public void clear()
-	{
-		for(Entry<String, Session> session : this.sessions.entrySet())
-		{
-			this.removeSession(session.getValue().getName());
-			session = null;
+			this.addSession(player.getUniqueId());
 		}
 	}
 	
@@ -74,9 +49,9 @@ public class SessionManager
 	 * @param key Username of the session's owner
 	 * @return Object Session, returns null if session not found
 	 */
-	public Session getSession(String key)
+	public Session getSession(UUID UUID)
 	{
-		return this.sessions.get(key);
+		return this.sessions.get(UUID);
 	}
 	
 	/**
@@ -84,12 +59,14 @@ public class SessionManager
 	 * 
 	 * @param name UserName of the session's owner
 	 */
-	public void addSession(String name)
+	public Session addSession(UUID UUID)
 	{
-		if(!this.sessions.containsKey(name))
+		if(!this.sessions.containsKey(UUID))
 		{
-			this.sessions.put(name, new Session(name));
+			Session session = this.sessions.put(UUID, new Session(UUID));
+			return session;
 		} 
+		return null;
 	}
 	
 	/**
@@ -97,11 +74,11 @@ public class SessionManager
 	 * 
 	 * @param name Name of the session's owner
 	 */
-	public void removeSession(String name)
+	public void removeSession(UUID UUID)
 	{
-		if(this.sessions.containsKey(name))
+		if(this.sessions.containsKey(UUID))
 		{
-			this.sessions.remove(name);
+			this.sessions.remove(UUID);
 		}
 	}
 }

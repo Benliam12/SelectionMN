@@ -1,6 +1,8 @@
 package ca.benliam12.benedit.session;
 
-import java.util.HashMap;
+import java.util.UUID;
+
+import ca.benliam12.benedit.selection.Selection;
 /**
  * Class of individual Session
  * @author Benliam12
@@ -12,21 +14,19 @@ public class Session
 	/**
 	 * Name of the session's owner
 	 */
-	private String name;
+	private UUID UUID;
+	private Clipboard clipboard;
+	private Selection selection;
 	
-	/**
-	 * HashMap containing all Objects stored in the session
-	 */
-	private HashMap<String,Object> infos = new HashMap<String,Object>();
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param name The user name of the session's owner
 	 */
-	public Session(String name)
+	public Session(UUID UUID)
 	{
-		this.name = name;
+		this.UUID = UUID;
 	}
 	
 	/**
@@ -34,9 +34,9 @@ public class Session
 	 * 
 	 * @return the name
 	 */
-	public String getName()
+	public UUID getUUID()
 	{
-		return this.name;
+		return this.UUID;
 	}
 	
 	/**
@@ -45,13 +45,14 @@ public class Session
 	 * @param key Key of the HashMap to get the Object wanted
 	 * @return The Object asked, returns null if the object does not exists
 	 */
-	public Object getInfo(String key)
+	public Clipboard getClipboard()
 	{
-		if(this.infos.containsKey(key))
-		{
-			return this.infos.get(key);
-		}
-		return null;
+		return this.clipboard;
+	}
+	
+	public Selection getSelection()
+	{
+		return this.selection;
 	}
 	
 	/**
@@ -60,8 +61,15 @@ public class Session
 	 * @param key Key where the Object will be stored in the session
 	 * @param object Object to store
 	 */
-	public void setInfo(String key, Object object)
+	public Clipboard setClipboard(Clipboard clipboard)
 	{
-		this.infos.put(key, object);
+		this.clipboard = clipboard;
+		return clipboard;
+	}
+	
+	public Selection setSelection(Selection selection)
+	{
+		this.selection = selection;
+		return selection;
 	}
 }
