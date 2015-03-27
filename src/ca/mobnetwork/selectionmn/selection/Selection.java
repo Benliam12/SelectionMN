@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
 
+import ca.mobnetwork.selectionmn.SelectionMN;
 import ca.mobnetwork.selectionmn.session.Session;
 
 public class Selection
@@ -32,6 +33,7 @@ public class Selection
 		if(location.getWorld() != world)
 		{
 			this.position2 = null;
+			this.world = location.getWorld();
 		}
 		
 		this.position1 = new Vector(location.getX(), location.getY(), location.getZ());
@@ -50,6 +52,7 @@ public class Selection
 		if(location.getWorld() != world)
 		{
 			this.position2 = null;
+			this.world = location.getWorld();
 		}
 		
 		this.position2 = new Vector(location.getX(), location.getY(), location.getZ());
@@ -57,31 +60,31 @@ public class Selection
 		return this.position2;
 	}
 	
-	public Vector getLocation()
+	public Location getLocation()
 	{
-		double x = Math.max(this.position1.getX(), this.position2.getX());
-		double y = Math.max(this.position1.getY(), this.position2.getY());
-		double z = Math.max(this.position1.getZ(), this.position2.getZ());
+		double x = Math.min(this.position1.getX(), this.position2.getX());
+		double y = Math.min(this.position1.getY(), this.position2.getY());
+		double z = Math.min(this.position1.getZ(), this.position2.getZ());
 		
-		return new Vector(x, y, z);
+		return new Location(this.world, x, y, z);
 	}
 	
 	public int getWidth()
 	{
 		int width = (int) this.position1.getX() - (int) this.position2.getX();
-		return Math.abs(width);
+		return Math.abs(width) + 1;
 	}
 	
 	public int getLength()
 	{
 		int length = (int) this.position1.getZ() - (int) this.position2.getZ();
-		return Math.abs(length);
+		return Math.abs(length) + 1;
 	}
 	
 	public int getHeight()
 	{
 		int height = (int) this.position1.getY() - (int) this.position2.getY();
-		return Math.abs(height);
+		return Math.abs(height) + 1;
 	}
 	
 	/**
@@ -111,27 +114,33 @@ public class Selection
 	 * @param loc2 The second point
 	 * @return ArrayList containting each blocks
 	 */
-	public ArrayList<ca.mobnetwork.selectionmn.blocks.Block> getBlocks(){
-		ArrayList<ca.mobnetwork.selectionmn.blocks.Block> blocks = new ArrayList<ca.mobnetwork.selectionmn.blocks.Block>();
-		
-		int maxX = this.getWidth();
-		int maxY = this.getHeight();
-		int maxZ = this.getLength();
-		
-		for(int x = 0; x < maxX; x++)
+	public ArrayList<ca.mobnetwork.selectionmn.blocks.Block> getBlocks()
+	{
+		if(this.position1 != null && this.position2 != null)
 		{
-			for(int y = 0; y < maxY; y++)
+			ArrayList<ca.mobnetwork.selectionmn.blocks.Block> blocks = new ArrayList<ca.mobnetwork.selectionmn.blocks.Block>();
+			
+			int maxX = this.getWidth();
+			int maxY = this.getHeight();
+			int maxZ = this.getLength();
+			
+			for(int x = 0; x < maxX; x++)
 			{
-				for(int z = 0; z < maxZ; z++)
+				for(int y = 0; y < maxY; y++)
 				{
-					ca.mobnetwork.selectionmn.blocks.Block block = new ca.mobnetwork.selectionmn.blocks.Block(this.world.getBlockAt(x, y, z).getType());
-					
-					blocks.add(block);
+					for(int z = 0; z < maxZ; z++)
+					{
+						ca.mobnetwork.selectionmn.blocks.Block block = new ca.mobnetwork.selectionmn.blocks.Block(this.world.getBlockAt(x, y, z).getType());
+						
+						blocks.add(block);
+					}
 				}
 			}
+			
+			return blocks;
 		}
 		
-		return blocks;
+		return null;
 	}
 	
 	/**
@@ -154,10 +163,12 @@ public class Selection
 				{
 					for(int z = 0; z < maxZ; z++)
 					{
-						Block block = this.world.getBlockAt(x, y, z);
+						Block block = this.world.getBlockAt(this.getLocation().add(x, y, z));
 						
 						block.setType(material);
 						block.setData(data);
+						
+						SelectionMN.log.info("1");
 					}
 				}
 			}

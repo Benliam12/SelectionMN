@@ -30,12 +30,15 @@ public class command implements CommandExecutor {
 		
 		if(label.equalsIgnoreCase("set"))
 		{
+			player.sendMessage("pos1: " + SessionManager.getInstance().getSession(player.getUniqueId()).getSelection().getPosition1().getZ());
+			player.sendMessage("pos2: " + SessionManager.getInstance().getSession(player.getUniqueId()).getSelection().getPosition2().getZ());
+			
 			if(args.length == 1)
 			{
 				try
 				{
 					String[] param = args[0].split(":");
-					Material material = Material.getMaterial(param[0]);
+					Material material = Material.getMaterial(param[0].toUpperCase());
 					
 					if(material.isBlock())
 					{
