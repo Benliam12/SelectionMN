@@ -1,7 +1,9 @@
 package ca.mobnetwork.selectionmn.session;
 
 import java.util.HashMap;
+import java.util.TimerTask;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,7 +14,7 @@ import org.bukkit.entity.Player;
  * @author Benliam12
  * @version 1.0
  */
-public class SessionManager 
+public class SessionManager
 {
 	private HashMap<UUID, Session> sessions = new HashMap<>();
 	private static SessionManager instance = new SessionManager();
@@ -99,6 +101,48 @@ public class SessionManager
 		if(this.sessions.containsKey(UUID))
 		{
 			this.sessions.remove(UUID);
+		}
+	}
+	
+	
+	private class SessionTracker extends TimerTask
+	{
+		
+		private boolean running = true;
+		private SessionManager sessionManager = SessionManager.getInstance();
+		
+		public void pause()
+		{
+			this.running = false;
+		}
+		
+		public void run()
+		{
+			synchronized (SessionManager.this)
+			{
+				while(this.running)
+				{
+					for(Entry<UUID, Session> sessionlist : sessionManager.getSessions().entrySet())
+					{
+						Session session = sessionlist.getValue();
+						if(!session.isOnline())
+						{
+							long elapseTime = System.currentTimeMillis() - session.getTime();
+							if(elapseTime < 300)
+							{
+								sessionManager.removeSession(sessionlist.getKey());
+							}
+						}
+					}
+					try{
+						Thread.sleep(1000);
+					}
+					catch(InterruptedException ex)
+					{
+						this.running = false;
+					}
+				}
+			}
 		}
 	}
 }

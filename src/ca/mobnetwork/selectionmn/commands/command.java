@@ -35,10 +35,11 @@ public class command implements CommandExecutor {
 				try
 				{
 					String[] param = args[0].split(":");
-					Material material = Material.getMaterial(param[0].toUpperCase());
 					
-					if(material.isBlock())
+					if(Material.getMaterial(param[0].toUpperCase()).isBlock())
 					{
+						Material material = Material.getMaterial(param[0].toUpperCase());
+						
 						SessionManager sessionManager = SessionManager.getInstance();
 						
 						if(param.length == 1)
@@ -82,6 +83,8 @@ public class command implements CommandExecutor {
 							return false;
 						}
 					}
+					
+					return false;
 				}
 				catch(Exception exception)
 				{
