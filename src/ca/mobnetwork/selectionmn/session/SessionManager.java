@@ -16,6 +16,8 @@ public class SessionManager
 {
 	private HashMap<UUID, Session> sessions = new HashMap<>();
 	private static SessionManager instance = new SessionManager();
+	private Thread thread;
+	private SessionCleaner sessionCleaner;
 	
 	/**
 	 * Method to get Instance of SessionManager
@@ -41,6 +43,19 @@ public class SessionManager
 		{
 			this.addSession(player.getUniqueId());
 		}
+		this.sessionCleaner = new SessionCleaner();
+		this.thread = new Thread(this.sessionCleaner);
+		this.thread.start();
+		
+	}
+	
+	public void stop()
+	{
+		this.sessionCleaner.pause();
+		this.thread.interrupt();
+		
+		this.thread = null;
+		this.sessionCleaner = null;
 	}
 	
 	/**
@@ -52,6 +67,11 @@ public class SessionManager
 	public Session getSession(UUID UUID)
 	{
 		return this.sessions.get(UUID);
+	}
+	
+	public HashMap<UUID,Session> getSessions()
+	{
+		return this.sessions;
 	}
 	
 	/**

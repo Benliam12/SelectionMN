@@ -27,7 +27,11 @@ public class PlayerListener implements Listener
 	public void PlayerJoin(PlayerJoinEvent event)
 	{
 		SessionManager sessionManager = SessionManager.getInstance();
-		
+		if(sessionManager.getSession(event.getPlayer().getUniqueId()) != null)
+		{
+			sessionManager.getSession(event.getPlayer().getUniqueId()).setOnline(true);
+			return;
+		}
 		sessionManager.addSession(event.getPlayer().getUniqueId());
 	}
 
@@ -39,7 +43,9 @@ public class PlayerListener implements Listener
 	{
 		SessionManager sessionManager = SessionManager.getInstance();
 		
-		sessionManager.removeSession(event.getPlayer().getUniqueId());
+		sessionManager.getSession(event.getPlayer().getUniqueId())
+		.setTime(System.currentTimeMillis())
+		.setOnline(false);
 	}
 	/**
 	 * Event when player click for selection

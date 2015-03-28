@@ -17,6 +17,8 @@ public class Session
 	private UUID UUID;
 	private Clipboard clipboard;
 	private Selection selection;
+	private long time;
+	private boolean online;
 	
 	
 	/**
@@ -27,6 +29,28 @@ public class Session
 	public Session(UUID UUID)
 	{
 		this.UUID = UUID;
+	}
+	
+	public Session setOnline(boolean isonline)
+	{
+		this.online = isonline;
+		return this;
+	}
+	
+	public boolean isOnline()
+	{
+		return this.online;
+	}
+	
+	public Session setTime(long time)
+	{
+		this.time = time;
+		return this;
+	}
+	
+	public long getTime()
+	{
+		return this.time;
 	}
 	
 	/**

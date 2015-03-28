@@ -55,5 +55,6 @@ public class SelectionMN extends JavaPlugin
 	 */
 	public void onDisable()
 	{
+		SessionManager.getInstance().stop();
 	}
 }
